@@ -3,30 +3,30 @@
 
 class Vec2
 {
-private:
-    float x = 0;
-    float y = 0;
 public:
+    double x;
+    double y;
+
     Vec2();
-    Vec2(int x, int y);
+    Vec2(double x, double y);
 
     bool operator == (const Vec2 & v2) const;
 
     bool operator != (const Vec2 & v2) const;
     Vec2 operator + (const Vec2 & v2) const;
     Vec2 operator - (const Vec2 & v2) const;
-    Vec2 operator * (const float val) const;
-    Vec2 operator / (const float val) const;
+    Vec2 operator * (const double val) const;
+    Vec2 operator / (const double val) const;
 
     void operator += (const Vec2 & v2);
     void operator -= (const Vec2 & v2);
-    void operator *= (const float val);
-    void operator /= (const float val);
+    void operator *= (const double val);
+    void operator /= (const double val);
 
-    float dist(const Vec2 & v2) const; 
+    double dist(const Vec2 & v2) const; 
 
-    float getX() const;
-    float getY() const;
-    void setX(const float num);
-    void setY(const float num);
+    double getX() const;
+    double getY() const;
+    void setX(const double num);
+    void setY(const double num);
 };
