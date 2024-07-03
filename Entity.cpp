@@ -9,21 +9,15 @@ Entity::Entity(double x, double y, SDL_Texture* tex):texture(tex)
 {
     position.x = x;
     position.y = y;
-
-    currentFrame.x = 0;
-    currentFrame.y = 0;
-    currentFrame.w = 32 * 4;
-    currentFrame.h = 32 * 4;
-
     
 }
 
-Vec2 Entity::getPosition() const
+Vec2& Entity::getPosition()
 {
     return position;
 }
 
-SDL_Texture* Entity::getTexture() const
+SDL_Texture* Entity::getTexture()
 {
     return texture;
 }
@@ -31,4 +25,16 @@ SDL_Texture* Entity::getTexture() const
 SDL_Rect Entity::getCurrentFrame() const
 {
     return currentFrame;
+}
+
+void Entity::animate(){}
+
+bool Entity::checkCollision(const Entity& other) const
+{
+    const SDL_Rect a = currentFrame;
+    const SDL_Rect b = other.getCurrentFrame();
+
+    if (a.x + a.w > b.x && a.x < b.x + b.w && a.y + a.h > b.y && a.y < b.y + b.h)
+       return true;
+    else{return false;;}
 }

@@ -6,14 +6,17 @@
 
 class Entity
 {
-private:
+protected:
     Vec2 position;
     SDL_Rect currentFrame;
     SDL_Texture* texture;
 public:
     Entity(double x, double y, SDL_Texture* tex);
 
-    Vec2 getPosition() const;
-    SDL_Texture* getTexture() const;
+    Vec2& getPosition();
+    SDL_Texture* getTexture();
     SDL_Rect getCurrentFrame() const;
+
+    virtual void animate();
+    bool checkCollision(const Entity& other) const;
 };

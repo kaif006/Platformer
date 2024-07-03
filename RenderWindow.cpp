@@ -5,9 +5,18 @@
 #include "Entity.hpp"
 using namespace std;
 
-RenderWindow::RenderWindow(const char* title, int width, int height): window(NULL), renderer(NULL)
+RenderWindow::RenderWindow()
+{}
+
+RenderWindow::RenderWindow(const char* title, int width, int height, bool fullScreen): window(NULL), renderer(NULL)
 {
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+    int flags = 0;
+    if(fullScreen)
+    {
+        flags = SDL_WINDOW_FULLSCREEN;
+    }
+
+    window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
     if(window == NULL)
     {
         cout << "Failed to initialize window" << SDL_GetError() <<  endl;
@@ -31,6 +40,8 @@ SDL_Texture* RenderWindow::loadTexture(const char* file_path)
 void RenderWindow::cleanUp()
 {
     SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
 }
 
 void RenderWindow::clear()
@@ -38,7 +49,7 @@ void RenderWindow::clear()
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity &entity)
+void RenderWindow::renderEntity(Entity &entity, float scale)
 {
     SDL_Rect src; // source rect
     src.x = entity.getCurrentFrame().x;
@@ -49,10 +60,15 @@ void RenderWindow::render(Entity &entity)
     SDL_Rect des; // destination rect
     des.x = entity.getPosition().x;
     des.y = entity.getPosition().y;
-    des.w = entity.getCurrentFrame().w;
-    des.h = entity.getCurrentFrame().h;
+    des.w = entity.getCurrentFrame().w * scale;
+    des.h = entity.getCurrentFrame().h * scale;
     
     SDL_RenderCopy(renderer, entity.getTexture(), &src, &des);
+}
+
+void RenderWindow::renderBG(SDL_Texture* tex)
+{
+    SDL_RenderCopy(renderer, tex, NULL, NULL);
 }
 
 void RenderWindow::display()

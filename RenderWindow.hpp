@@ -11,10 +11,12 @@ private:
     SDL_Renderer* renderer;
     SDL_Window* window;
 public:
-    RenderWindow(const char* title, int width, int height);
+    RenderWindow();
+    RenderWindow(const char* title, int width, int height, bool fullScreen);
     SDL_Texture* loadTexture(const char* file_path);
     void cleanUp();
     void clear();
-    void render(Entity &entity);
+    void renderEntity(Entity &entity, float scale = 1.0f);
+    void renderBG(SDL_Texture* tex);
     void display();
 };

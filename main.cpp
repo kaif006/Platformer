@@ -4,42 +4,42 @@
 #include <vector>
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Game.hpp"
+
 using namespace std;
 
+const int WIDTH = 1280; // screen width
+const int HEIGHT = 720; // screen height
+
+Game *game = NULL;
 
 int main(int argc, char* argv[]) 
 {
-    if(SDL_Init(SDL_INIT_VIDEO) > 0)
-        cout << "Init error" << SDL_GetError() << endl;
+    game = new Game();
 
-    RenderWindow window("Untitled Platformer", 1280, 720);
-    SDL_Texture* platformTex = window.loadTexture("/Users/Kaif/Documents/C++ practice/Games/Platformer/images/Fire_4_16x16.png");
 
-    vector<Entity> entities = 
-    {Entity(0,0,platformTex),
-     Entity(30,0,platformTex),
-     Entity(30,30,platformTex)};
+    const int FPS = 30;
+    const int timeBWframes = 1000 / FPS;
 
-    bool running = true;
-    SDL_Event event;
+    game->init("Untitled Plumber Game", WIDTH, HEIGHT, false);
 
-    while(running)
+    while(game->running())
     {
-        while(SDL_PollEvent(&event))
-        {
-            if(event.type == SDL_QUIT)
-                running = false;
-        }
-        window.clear();
-        for(Entity& entity : entities)
-        {
-            window.render(entity);
-        }
-        window.display();
+        int startTicks = SDL_GetTicks(); 
+
+        game->handleEvents();
+
+        game->update();
+
+        game->render();
+
+        //// MANAGE FPS ////
+        int deltaTicks = SDL_GetTicks() - startTicks;
+        if(deltaTicks < timeBWframes) 
+            SDL_Delay(timeBWframes - deltaTicks);
     }
 
-    window.cleanUp();
-    SDL_Quit();
+    game->clean();
     
     
 }
